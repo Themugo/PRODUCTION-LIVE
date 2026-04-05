@@ -1,6 +1,6 @@
 "use client";
 
-import LiveMap from "@/components/LiveMap"; // keep .jsx component import
+import LiveMap from "@/components/LiveMap";
 
 export default function Dashboard({ devices = [], sims = [], users = [] }) {
   return (
@@ -56,9 +56,7 @@ export default function Dashboard({ devices = [], sims = [], users = [] }) {
                 ))
               ) : (
                 <tr>
-                  <td colSpan="3" className="py-4 text-center text-gray-400">
-                    No devices found
-                  </td>
+                  <td colSpan="3" className="py-4 text-center text-gray-400">No devices found</td>
                 </tr>
               )}
             </tbody>
@@ -89,9 +87,7 @@ export default function Dashboard({ devices = [], sims = [], users = [] }) {
                 ))
               ) : (
                 <tr>
-                  <td colSpan="4" className="py-4 text-center text-gray-400">
-                    No SIMs found
-                  </td>
+                  <td colSpan="4" className="py-4 text-center text-gray-400">No SIMs found</td>
                 </tr>
               )}
             </tbody>
@@ -122,9 +118,7 @@ export default function Dashboard({ devices = [], sims = [], users = [] }) {
                 ))
               ) : (
                 <tr>
-                  <td colSpan="4" className="py-4 text-center text-gray-400">
-                    No users found
-                  </td>
+                  <td colSpan="4" className="py-4 text-center text-gray-400">No users found</td>
                 </tr>
               )}
             </tbody>
