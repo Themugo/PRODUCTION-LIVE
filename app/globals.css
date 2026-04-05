@@ -1,8 +1,16 @@
-/* Leaflet CSS */
-@import url('https://unpkg.com/leaflet@1.9.4/dist/leaflet.css');
+@import "leaflet/dist/leaflet.css";
 
-.leaflet-container {
-  height: 100%;
-  width: 100%;
-  border-radius: 0.5rem; /* match dashboard card */
+/* Tailwind directives */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Optional custom colors */
+:root {
+  --simtrace-light: #f7fafc;
+  --simtrace-dark: #1f2937;
+  --simtrace-secondary: #6b7280;
+  --simtrace-info: #3b82f6;
+  --simtrace-success: #10b981;
+  --simtrace-accent: #f59e0b;
 }
