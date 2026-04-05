@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import LiveMap from "@/components/LiveMap"; // Adjust path if needed
 
 export default function Dashboard({ devices = [], sims = [], users = [] }) {
   return (
@@ -132,9 +132,9 @@ export default function Dashboard({ devices = [], sims = [], users = [] }) {
         </div>
       </div>
 
-      {/* Live Map Placeholder */}
-      <div className="bg-white rounded-lg shadow p-6 h-96 flex items-center justify-center text-gray-400">
-        Live Tracking Map Coming Soon...
+      {/* Live Map */}
+      <div className="bg-white rounded-lg shadow p-0 h-96 overflow-hidden">
+        <LiveMap initialDevices={devices} />
       </div>
     </div>
   );
