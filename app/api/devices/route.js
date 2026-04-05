@@ -1,25 +1,12 @@
-import { prisma } from "@/lib/db";
+import { prisma } from '@/lib/db';
 
-export async function GET() {
-  try {
-    const devices = await prisma.device.findMany();
-    return Response.json(devices);
-  } catch {
-    return Response.json({ error: "Failed" }, { status: 500 });
-  }
+export async function GET(req) {
+  const devices = await prisma.device.findMany({ include: { sims: true } });
+  return new Response(JSON.stringify(devices), { status: 200 });
 }
 
 export async function POST(req) {
-  try {
-    const body = await req.json();
-    const device = await prisma.device.create({
-      data: {
-        imei: body.imei,
-        name: body.name || "Unnamed"
-      }
-    });
-    return Response.json(device);
-  } catch {
-    return Response.json({ error: "Failed" }, { status: 500 });
-  }
+  const data = await req.json();
+  const newDevice = await prisma.device.create({ data });
+  return new Response(JSON.stringify(newDevice), { status: 201 });
 }
