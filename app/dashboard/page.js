@@ -1,73 +1,135 @@
-// app/dashboard/page.js
-import React, { useState, useEffect } from 'react';
-import Card from '../../components/Card';
-import AnalyticsCard from '../../components/AnalyticsCard';
-import AnalyticsChart from '../../components/AnalyticsChart';
-import AdBoard from '../../components/AdBoard';
-import CheckoutButton from '../../components/CheckoutButton';
+"use client";
 
-export default function DashboardPage() {
-  const [data, setData] = useState(null);
-  const [subscription, setSubscription] = useState({ plan: 'free' });
+import LiveMap from "@/components/LiveMap";
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const res = await fetch('/api/dashboard', { cache: 'no-store' });
-      const json = await res.json();
-      setData(json);
-    };
-    fetchData();
-  }, []);
-
-  if (!data) return <div style={{ padding: '50px', textAlign: 'center' }}>Loading dashboard...</div>;
-
+export default function Dashboard({ devices = [], sims = [], users = [] }) {
   return (
-    <>
-      <AdBoard ads={[{ text: 'Upgrade to Pro!', link: '/pricing' }]} />
-
-      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '15px', marginBottom: '20px' }}>
-        {data.kpis.map((kpi, idx) => (
-          <AnalyticsCard key={idx} title={kpi.title} value={kpi.value} trend={kpi.trend} />
-        ))}
-      </div>
-
-      <AnalyticsChart data={data.chartData} title="Monthly Active Users Trend" />
-
-      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '15px', marginTop: '20px' }}>
-        <Card
-          title="📡 Devices"
-          description="Monitor registered devices"
-          buttons={data.devices.map(d => ({
-            label: `${d.name} (${d.status})`,
-            link: '/devices',
-            icon: d.status === 'Active' ? '✅' : '⚠️',
-          }))}
-        />
-        <Card
-          title="👥 Users"
-          description="Manage system users"
-          buttons={data.users.map(u => ({
-            label: `${u.name} (${u.role})`,
-            link: '/users',
-            icon: u.role === 'Admin' ? '⭐' : '👤',
-          }))}
-        />
-      </div>
-
-      {subscription.plan === 'free' && (
-        <div
-          style={{
-            marginTop: '20px',
-            padding: '15px',
-            backgroundColor: '#fef3c7',
-            borderRadius: '12px',
-            textAlign: 'center',
-          }}
-        >
-          🌟 Upgrade to Premium to unlock Pro modules!
-          <CheckoutButton plan="premium" />
+    <div className="min-h-screen bg-simtrace-light p-6 font-sans">
+      {/* Header */}
+      <header className="flex items-center justify-between mb-8">
+        <div className="flex items-center gap-4">
+          <img src="/logo.png" alt="SimTrace Logo" className="h-12 w-12" />
+          <div>
+            <h1 className="text-2xl font-bold text-simtrace-dark">SIMTRACE</h1>
+            <p className="text-sm text-simtrace-secondary">Connect. Protect. Recover.</p>
+          </div>
         </div>
-      )}
-    </>
+      </header>
+
+      {/* Stats Cards */}
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-8">
+        <div className="bg-simtrace-info text-white rounded-lg shadow p-6">
+          <h2 className="text-lg font-semibold">Devices</h2>
+          <p className="text-3xl mt-2">{devices.length}</p>
+        </div>
+        <div className="bg-simtrace-success text-white rounded-lg shadow p-6">
+          <h2 className="text-lg font-semibold">SIMs</h2>
+          <p className="text-3xl mt-2">{sims.length}</p>
+        </div>
+        <div className="bg-simtrace-accent text-white rounded-lg shadow p-6">
+          <h2 className="text-lg font-semibold">Users</h2>
+          <p className="text-3xl mt-2">{users.length}</p>
+        </div>
+      </div>
+
+      {/* Tables */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+        {/* Devices Table */}
+        <div className="bg-white rounded-lg shadow p-4 overflow-x-auto">
+          <h3 className="font-semibold text-simtrace-dark mb-2">Devices</h3>
+          <table className="w-full text-left text-sm text-gray-600">
+            <thead className="border-b">
+              <tr>
+                <th className="py-2">Name</th>
+                <th className="py-2">SIM Number</th>
+                <th className="py-2">Created At</th>
+              </tr>
+            </thead>
+            <tbody>
+              {devices.length ? (
+                devices.map((device) => (
+                  <tr key={device.id} className="border-b hover:bg-simtrace-light">
+                    <td className="py-2">{device.name}</td>
+                    <td className="py-2">{device.simNumber}</td>
+                    <td className="py-2">{new Date(device.createdAt).toLocaleDateString()}</td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan="3" className="py-4 text-center text-gray-400">No devices found</td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </div>
+
+        {/* SIMs Table */}
+        <div className="bg-white rounded-lg shadow p-4 overflow-x-auto">
+          <h3 className="font-semibold text-simtrace-dark mb-2">SIMs</h3>
+          <table className="w-full text-left text-sm text-gray-600">
+            <thead className="border-b">
+              <tr>
+                <th className="py-2">Number</th>
+                <th className="py-2">Status</th>
+                <th className="py-2">Device</th>
+                <th className="py-2">Created At</th>
+              </tr>
+            </thead>
+            <tbody>
+              {sims.length ? (
+                sims.map((sim) => (
+                  <tr key={sim.id} className="border-b hover:bg-simtrace-light">
+                    <td className="py-2">{sim.number}</td>
+                    <td className="py-2">{sim.status}</td>
+                    <td className="py-2">{sim.deviceName || "-"}</td>
+                    <td className="py-2">{new Date(sim.createdAt).toLocaleDateString()}</td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan="4" className="py-4 text-center text-gray-400">No SIMs found</td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </div>
+
+        {/* Users Table */}
+        <div className="bg-white rounded-lg shadow p-4 overflow-x-auto">
+          <h3 className="font-semibold text-simtrace-dark mb-2">Users</h3>
+          <table className="w-full text-left text-sm text-gray-600">
+            <thead className="border-b">
+              <tr>
+                <th className="py-2">Name</th>
+                <th className="py-2">Email</th>
+                <th className="py-2">Role</th>
+                <th className="py-2">Created At</th>
+              </tr>
+            </thead>
+            <tbody>
+              {users.length ? (
+                users.map((user) => (
+                  <tr key={user.id} className="border-b hover:bg-simtrace-light">
+                    <td className="py-2">{user.name}</td>
+                    <td className="py-2">{user.email}</td>
+                    <td className="py-2">{user.role}</td>
+                    <td className="py-2">{new Date(user.createdAt).toLocaleDateString()}</td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan="4" className="py-4 text-center text-gray-400">No users found</td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      {/* Live Map */}
+      <div className="bg-white rounded-lg shadow p-0 h-96 overflow-hidden">
+        <LiveMap initialDevices={devices} />
+      </div>
+    </div>
   );
 }
