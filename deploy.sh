@@ -2,7 +2,7 @@
 
 echo "🔹 Starting full deployment script..."
 
-# Step 0: Check current folder
+# Step 0: Check project root
 echo "Current folder:"
 pwd
 ls
@@ -16,41 +16,35 @@ fi
 echo "🔹 Upgrading Next.js & Prisma..."
 npm install next@latest --save
 npm install prisma@latest @prisma/client@latest
-echo "✅ Packages upgraded"
-read -p "Press Enter to continue..."
-
-# Step 2: Generate Prisma Client
-echo "🔹 Generating Prisma Client..."
 npx prisma generate
-echo "✅ Prisma Client generated"
+echo "✅ Packages upgraded and Prisma Client generated"
 read -p "Press Enter to continue..."
 
-# Step 3: Run pending Prisma migrations if any
+# Step 2: Run Prisma migrations if any
 echo "🔹 Checking for pending Prisma migrations..."
 npx prisma migrate status
 read -p "Do you want to deploy pending migrations? (y/n) " migrate_choice
 if [ "$migrate_choice" == "y" ]; then
-    echo "🔹 Deploying migrations..."
     npx prisma migrate deploy
     echo "✅ Migrations applied"
 else
-    echo "⚠️ Skipping migrations. Make sure your database is up-to-date."
+    echo "⚠️ Skipping migrations"
 fi
 read -p "Press Enter to continue..."
 
-# Step 4: Build the project
+# Step 3: Build project
 echo "🔹 Building project..."
 npm run build
 echo "✅ Project built"
-read -p "Press Enter to start local test server..."
+read -p "Press Enter to test locally..."
 
 # Optional local test
 echo "🔹 Starting local server for testing..."
 npm run start
-echo "✅ Local server running (http://localhost:3000)"
+echo "✅ Local server running at http://localhost:3000"
+read -p "Press Enter to continue to GitHub push and Vercel deploy..."
 
-# Step 5: Push to GitHub
-echo "🔹 Pushing project to GitHub"
+# Step 4: Push to GitHub
 read -p "Enter your GitHub repo URL (e.g., https://github.com/user/repo.git): " repo_url
 git init
 git add .
@@ -60,11 +54,17 @@ git remote add origin $repo_url
 git push -u origin main
 echo "✅ Project pushed to GitHub"
 
-# Step 6: Vercel deployment instructions
-echo "🔹 Now, deploy on Vercel:"
-echo " 1️⃣ Go to https://vercel.com/new → Import GitHub repo"
-echo " 2️⃣ Add Environment Variables matching your local .env"
-echo " 3️⃣ Build Command: npm run build"
-echo " 4️⃣ Output Directory: .next"
-echo "Vercel will handle installation, Prisma postinstall, and deployment."
-echo "🎉 Deployment script complete!"
+# Step 5: Deploy to Vercel
+echo "🔹 Deploying to Vercel via CLI..."
+read -p "Enter your Vercel project name (or press Enter to use default): " vercel_project
+read -p "Enter Vercel team slug (or press Enter to skip): " vercel_team
+
+if [ -z "$vercel_project" ]; then
+  vercel --prod
+elif [ -z "$vercel_team" ]; then
+  vercel --prod --name $vercel_project
+else
+  vercel --prod --name $vercel_project --team $vercel_team
+fi
+
+echo "🎉 Deployment complete!"
