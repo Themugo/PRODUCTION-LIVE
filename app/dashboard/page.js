@@ -1,12 +1,23 @@
 "use client";
 
-import LiveMap from "@/components/LiveMap"; // Make sure this exists
+import LiveMap from "@/components/LiveMap";
 
 export default function Dashboard() {
-  // Safe defaults to prevent runtime errors
-  const devices = [];
-  const sims = [];
-  const users = [];
+  // Dummy data for testing
+  const devices = [
+    { name: "Device 1", simNumber: "12345", createdAt: new Date(), lat: 1.3, lng: 36.8 },
+    { name: "Device 2", simNumber: "67890", createdAt: new Date(), lat: -1.3, lng: 36.9 },
+  ];
+
+  const sims = [
+    { number: "12345", status: "Active", deviceName: "Device 1", createdAt: new Date() },
+    { number: "67890", status: "Inactive", deviceName: "Device 2", createdAt: new Date() },
+  ];
+
+  const users = [
+    { name: "Alice", email: "alice@test.com", role: "Admin", createdAt: new Date() },
+    { name: "Bob", email: "bob@test.com", role: "User", createdAt: new Date() },
+  ];
 
   return (
     <div className="min-h-screen bg-simtrace-light p-6 font-sans">
@@ -51,19 +62,13 @@ export default function Dashboard() {
               </tr>
             </thead>
             <tbody>
-              {devices.length ? (
-                devices.map((d, i) => (
-                  <tr key={i} className="border-b hover:bg-simtrace-light">
-                    <td className="py-2">{d.name ?? "-"}</td>
-                    <td className="py-2">{d.simNumber ?? "-"}</td>
-                    <td className="py-2">{d.createdAt ? new Date(d.createdAt).toLocaleDateString() : "-"}</td>
-                  </tr>
-                ))
-              ) : (
-                <tr>
-                  <td colSpan="3" className="py-4 text-center text-gray-400">No devices found</td>
+              {devices.map((d, i) => (
+                <tr key={i} className="border-b hover:bg-simtrace-light">
+                  <td className="py-2">{d.name}</td>
+                  <td className="py-2">{d.simNumber}</td>
+                  <td className="py-2">{new Date(d.createdAt).toLocaleDateString()}</td>
                 </tr>
-              )}
+              ))}
             </tbody>
           </table>
         </div>
@@ -81,20 +86,14 @@ export default function Dashboard() {
               </tr>
             </thead>
             <tbody>
-              {sims.length ? (
-                sims.map((s, i) => (
-                  <tr key={i} className="border-b hover:bg-simtrace-light">
-                    <td className="py-2">{s.number ?? "-"}</td>
-                    <td className="py-2">{s.status ?? "-"}</td>
-                    <td className="py-2">{s.deviceName ?? "-"}</td>
-                    <td className="py-2">{s.createdAt ? new Date(s.createdAt).toLocaleDateString() : "-"}</td>
-                  </tr>
-                ))
-              ) : (
-                <tr>
-                  <td colSpan="4" className="py-4 text-center text-gray-400">No SIMs found</td>
+              {sims.map((s, i) => (
+                <tr key={i} className="border-b hover:bg-simtrace-light">
+                  <td className="py-2">{s.number}</td>
+                  <td className="py-2">{s.status}</td>
+                  <td className="py-2">{s.deviceName}</td>
+                  <td className="py-2">{new Date(s.createdAt).toLocaleDateString()}</td>
                 </tr>
-              )}
+              ))}
             </tbody>
           </table>
         </div>
@@ -112,26 +111,20 @@ export default function Dashboard() {
               </tr>
             </thead>
             <tbody>
-              {users.length ? (
-                users.map((u, i) => (
-                  <tr key={i} className="border-b hover:bg-simtrace-light">
-                    <td className="py-2">{u.name ?? "-"}</td>
-                    <td className="py-2">{u.email ?? "-"}</td>
-                    <td className="py-2">{u.role ?? "-"}</td>
-                    <td className="py-2">{u.createdAt ? new Date(u.createdAt).toLocaleDateString() : "-"}</td>
-                  </tr>
-                ))
-              ) : (
-                <tr>
-                  <td colSpan="4" className="py-4 text-center text-gray-400">No users found</td>
+              {users.map((u, i) => (
+                <tr key={i} className="border-b hover:bg-simtrace-light">
+                  <td className="py-2">{u.name}</td>
+                  <td className="py-2">{u.email}</td>
+                  <td className="py-2">{u.role}</td>
+                  <td className="py-2">{new Date(u.createdAt).toLocaleDateString()}</td>
                 </tr>
-              )}
+              ))}
             </tbody>
           </table>
         </div>
       </div>
 
-      {/* Live Map */}
+      {/* LiveMap */}
       <div className="bg-white rounded-lg shadow p-0 h-96 overflow-hidden">
         <LiveMap initialDevices={devices} />
       </div>
