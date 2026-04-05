@@ -8,8 +8,27 @@ datasource db {
 }
 
 model Device {
-  id String @id @default(cuid())
-  imei String @unique
-  name String?
+  id        String   @id @default(cuid())
+  name      String
+  simNumber String   @unique
+  createdAt DateTime @default(now())
+  sims      SIM[]
+}
+
+model SIM {
+  id        String   @id @default(cuid())
+  number    String   @unique
+  status    String   @default("active")
+  deviceId  String?
+  device    Device?  @relation(fields: [deviceId], references: [id])
+  createdAt DateTime @default(now())
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  name      String?
+  password  String
+  role      String   @default("user")
   createdAt DateTime @default(now())
 }
