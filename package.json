@@ -1,19 +1,23 @@
 {
-  "name":"simtrace",
-  "private":true,
-  "scripts":{
-    "dev":"next dev",
-    "build":"prisma generate && next build",
-    "start":"next start",
-    "postinstall":"prisma generate"
+  "name": "simtrace",
+  "version": "1.0.0",
+  "private": true,
+  "engines": {
+    "node": ">=18.17.0"
   },
-  "dependencies":{
+  "scripts": {
+    "dev": "next dev",
+    "build": "prisma generate && next build",
+    "start": "next start",
+    "postinstall": "prisma generate"
+  },
+  "dependencies": {
     "next": "14.2.15",
-    "react":"18.2.0",
-    "react-dom":"18.2.0",
-    "@prisma/client":"^5.0.0"
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "@prisma/client": "^5.12.0"
   },
-  "devDependencies":{
-    "prisma":"^5.0.0"
+  "devDependencies": {
+    "prisma": "^5.12.0"
   }
 }
