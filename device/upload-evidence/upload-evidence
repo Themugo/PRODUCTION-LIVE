@@ -1,0 +1,6 @@
+await db.query(
+`INSERT INTO device_commands
+(imei,command)
+VALUES ($1,'CAPTURE_PHOTO')`,
+[imei]
+)

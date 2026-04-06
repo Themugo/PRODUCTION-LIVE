@@ -1,0 +1,22 @@
+"use client"
+export default function WebhostDashboard(){
+
+async function createStation(){
+  const name = prompt("Station Name")
+  const city = prompt("City")
+  const country = prompt("Country")
+  await fetch("/api/webhost/create-station",{
+    method:"POST",
+    headers:{"Content-Type":"application/json"},
+    body:JSON.stringify({name,city,country})
+  })
+  alert("Station Created")
+}
+
+return (
+<div>
+<h1>SIMTRACE Webhost Dashboard</h1>
+<button onClick={createStation}>Create Police Station</button>
+</div>
+)
+}

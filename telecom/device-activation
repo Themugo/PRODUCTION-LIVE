@@ -1,0 +1,16 @@
+{
+ "imei":"356789123456789",
+ "carrier":"Safaricom",
+ "country":"Kenya",
+ "city":"Nairobi"
+if(device.status === "STOLEN"){
+
+await db.query(
+`INSERT INTO blackmarket_alerts
+(device_id,imei,alert_type,description,risk_score)
+VALUES($1,$2,'TELECOM_ACTIVATION','Stolen phone activated on telecom network',95)`,
+[device_id,imei]
+)
+
+}
+}

@@ -1,0 +1,33 @@
+"use client"
+import { useState, useEffect } from "react"
+
+export default function FriendlyTracking(){
+  const [members,setMembers] = useState([])
+  const [selected,setSelected] = useState(null)
+  
+  useEffect(()=>{
+    fetch("/api/tracking/members")
+      .then(r=>r.json())
+      .then(d=>setMembers(d))
+  },[])
+  
+  async function startTracking(){
+    await fetch("/api/tracking/start",{
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({target_user_id:selected})
+    })
+    alert("Tracking started!")
+  }
+
+  return(
+    <div>
+      <h2>Friendly Live Tracking</h2>
+      <select onChange={e=>setSelected(e.target.value)}>
+        <option value="">Select Member</option>
+        {members.map(m=><option key={m.id} value={m.id}>{m.name}</option>)}
+      </select>
+      <button onClick={startTracking}>Track</button>
+    </div>
+  )
+}
