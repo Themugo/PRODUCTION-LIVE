@@ -1,34 +1,30 @@
+
 generator client {
   provider = "prisma-client-js"
 }
-
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
-model Device {
-  id        String   @id @default(cuid())
-  name      String
-  simNumber String   @unique
-  createdAt DateTime @default(now())
-  sims      SIM[]
-}
-
-model SIM {
-  id        String   @id @default(cuid())
-  number    String   @unique
-  status    String   @default("active")
-  deviceId  String?
-  device    Device?  @relation(fields: [deviceId], references: [id])
-  createdAt DateTime @default(now())
+model Organization {
+  id   String @id @default(uuid())
+  name String
+  type String
+  users User[]
 }
 
 model User {
-  id        String   @id @default(cuid())
-  email     String   @unique
-  name      String?
-  password  String
-  role      String   @default("user")
-  createdAt DateTime @default(now())
+  id String @id @default(uuid())
+  email String @unique
+  role String
+  organizationId String
+}
+
+model Device {
+  id String @id @default(uuid())
+  imei String @unique
+  organizationId String
+  lat Float?
+  lng Float?
 }
