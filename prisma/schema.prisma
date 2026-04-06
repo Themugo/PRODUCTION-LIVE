@@ -1,30 +1,15 @@
-
 generator client {
   provider = "prisma-client-js"
 }
+
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
-model Organization {
-  id   String @id @default(uuid())
-  name String
-  type String
-  users User[]
-}
-
-model User {
-  id String @id @default(uuid())
-  email String @unique
-  role String
-  organizationId String
-}
-
 model Device {
-  id String @id @default(uuid())
+  id String @id @default(cuid())
   imei String @unique
-  organizationId String
-  lat Float?
-  lng Float?
+  name String?
+  createdAt DateTime @default(now())
 }

@@ -1,9 +1,3 @@
-
-export default function Home(){
-  return (
-    <div style={{padding:40}}>
-      <h1>SimTrace Live</h1>
-      <p>Deployment Ready</p>
-    </div>
-  )
+export default function Home() {
+  return <h1>SIMTRACE LIVE</h1>;
 }
